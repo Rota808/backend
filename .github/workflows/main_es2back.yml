@@ -25,15 +25,27 @@ jobs:
         run: |
           python -m venv venv
           source venv/bin/activate
-          pip install -r requirements.txt
+          # Install from both possible requirements.txt locations
+          if [ -f "../requirements.txt" ]; then
+            pip install -r ../requirements.txt
+          fi
+          if [ -f "requirements.txt" ]; then
+            pip install -r requirements.txt
+          fi
           pip install gunicorn  # Explicitly install gunicorn
 
       - name: Create deployment package
         working-directory: ./backend/back
         run: |
-          # Create a proper Azure deployment structure
           mkdir -p deployment/backend/back
           cp -r * deployment/backend/back/
+          # Include requirements.txt if it exists
+          if [ -f "../requirements.txt" ]; then
+            cp ../requirements.txt deployment/
+          fi
+          if [ -f "requirements.txt" ]; then
+            cp requirements.txt deployment/
+          fi
           cd deployment
           zip -r ../release.zip .
 
@@ -60,7 +72,6 @@ jobs:
         run: |
           mkdir -p deployment
           unzip release.zip -d deployment
-          # Azure expects files in /home/site/wwwroot
           mv deployment/backend/back/* deployment/
           rm -rf deployment/backend
           zip -r final_release.zip deployment/*
