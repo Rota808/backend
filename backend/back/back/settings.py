@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-ALLOWED_HOSTS = ['https://es2back-f9bra3hfdua8cfa7.francecentral-01.azurewebsites.net', 'https://blue-desert-0e083480f.6.azurestaticapps.net']
+ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS = ['https://es2back-f9bra3hfdua8cfa7.francecentral-01.azurewebsites.net', 'https://blue-desert-0e083480f.6.azurestaticapps.net']
 DEBUG = False
 SECRET_KEY = 'django-insecure-vi!fgxv#jweky%z*te3587ll+k7r6(9x49xulg&5mrz&utn4bf'
@@ -49,11 +49,17 @@ INSTALLED_APPS = [
     'django_extensions',
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [],
+    'DEFAULT_PERMISSION_CLASSES': [],
+    'UNAUTHENTICATED_USER': None,
+}
+
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
+    #'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
