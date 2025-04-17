@@ -25,9 +25,11 @@ CSRF_TRUSTED_ORIGINS = [os.environ['WEBSITE']]
 DEBUG = False
 SECRET_KEY = os.environ['SECRET']
 CORS_ALLOWED_ORIGINS = [
-    "https://localhost:8000",
-    os.environ['WEBSITE'],
+    "https://blue-desert-0e083480f.6.azurestaticapps.net",
+    "http://localhost:8080/",
+    "https://es2back-f9bra3hfdua8cfa7.francecentral-01.azurewebsites.net"
 ]
+
 
 # Application definition
 
@@ -45,6 +47,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -52,7 +55,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'back.urls'
