@@ -20,8 +20,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-ALLOWED_HOSTS = ['es2back-f9bra3hfdua8cfa7.francecentral-01.azurewebsites.net', 'https://blue-desert-0e083480f.6.azurestaticapps.net']
-CSRF_TRUSTED_ORIGINS = ['es2back-f9bra3hfdua8cfa7.francecentral-01.azurewebsites.net', 'https://blue-desert-0e083480f.6.azurestaticapps.net']
+ALLOWED_HOSTS = ['https://es2back-f9bra3hfdua8cfa7.francecentral-01.azurewebsites.net', 'https://blue-desert-0e083480f.6.azurestaticapps.net']
+CSRF_TRUSTED_ORIGINS = ['https://es2back-f9bra3hfdua8cfa7.francecentral-01.azurewebsites.net', 'https://blue-desert-0e083480f.6.azurestaticapps.net']
 DEBUG = False
 SECRET_KEY = os.environ['SECRET']
 CORS_ALLOWED_ORIGINS = [
@@ -31,7 +31,7 @@ CORS_ALLOWED_ORIGINS = [
 ]
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = [
-    'es2back-f9bra3hfdua8cfa7.francecentral-01.azurewebsites.net', 'https://blue-desert-0e083480f.6.azurestaticapps.net',
+    'https://es2back-f9bra3hfdua8cfa7.francecentral-01.azurewebsites.net', 'https://blue-desert-0e083480f.6.azurestaticapps.net',
 ]
 
 # Application definition
