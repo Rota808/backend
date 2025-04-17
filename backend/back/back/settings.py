@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 ALLOWED_HOSTS = ['https://es2back-f9bra3hfdua8cfa7.francecentral-01.azurewebsites.net', 'https://blue-desert-0e083480f.6.azurestaticapps.net']
 CSRF_TRUSTED_ORIGINS = ['https://es2back-f9bra3hfdua8cfa7.francecentral-01.azurewebsites.net', 'https://blue-desert-0e083480f.6.azurestaticapps.net']
 DEBUG = False
-SECRET_KEY = os.environ['SECRET']
+SECRET_KEY = 'django-insecure-vi!fgxv#jweky%z*te3587ll+k7r6(9x49xulg&5mrz&utn4bf'
 CORS_ALLOWED_ORIGINS = [
     "https://blue-desert-0e083480f.6.azurestaticapps.net",
     "http://localhost:8080",
@@ -86,11 +86,11 @@ WSGI_APPLICATION = 'back.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        "NAME": os.getenv("PGDATABASE"),
-        "USER": os.getenv("PGUSER"),
-        "PASSWORD": os.getenv("PGPASSWORD"),
-        "HOST": os.getenv("PGHOST"),
-        "PORT": os.getenv("PGPORT"),
+        "NAME": 'postgres',
+        "USER": 'Antonio',
+        "PASSWORD": 'a12345678@',
+        "HOST": 'antonio.postgres.database.azure.com',
+        "PORT": '5432',
     }
 }
 
