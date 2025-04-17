@@ -20,20 +20,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-vi!fgxv#jweky%z*te3587ll+k7r6(9x49xulg&5mrz&utn4bf'
-
-# SECURITY WARNING: don't run with debug turned on in production!
+ALLOWED_HOSTS = [os.environ['WEBSITE']]
+CSRF_TRUSTED_ORIGINS = [os.environ['WEBSITE']]
 DEBUG = False
-
+SECRET_KEY = os.environ['SECRET']
 CORS_ALLOWED_ORIGINS = [
     "https://localhost:8000",
-    "https://blue-desert-0e083480f.6.azurestaticapps.net/",
+    os.environ['WEBSITE'],
 ]
-
-ALLOWED_HOSTS = []
-CORS_ALLOW_ALL_ORIGINS = True
-
 
 # Application definition
 
