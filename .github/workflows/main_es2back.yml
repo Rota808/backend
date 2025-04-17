@@ -21,15 +21,21 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        working-directory: ./backend
+        working-directory: ./backend/back # Changed to point to inner back folder
         run: |
           python -m venv venv
           source venv/bin/activate
           pip install -r requirements.txt
+          pip install gunicorn  # Explicitly install gunicorn
 
-      - name: Zip artifact for deployment
-        working-directory: ./backend
-        run: zip -r ../release.zip . -x "venv/*"
+      - name: Create deployment package
+        working-directory: ./backend/back
+        run: |
+          # Create a proper Azure deployment structure
+          mkdir -p deployment/backend/back
+          cp -r * deployment/backend/back/
+          cd deployment
+          zip -r ../release.zip .
 
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v4
@@ -51,7 +57,13 @@ jobs:
           name: python-app
 
       - name: Unzip artifact for deployment
-        run: unzip release.zip
+        run: |
+          mkdir -p deployment
+          unzip release.zip -d deployment
+          # Azure expects files in /home/site/wwwroot
+          mv deployment/backend/back/* deployment/
+          rm -rf deployment/backend
+          zip -r final_release.zip deployment/*
 
       - name: "Deploy to Azure Web App"
         uses: azure/webapps-deploy@v3
@@ -60,3 +72,4 @@ jobs:
           app-name: "es2back"
           slot-name: "Production"
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_F331B359598E4940A3E4F3E152E3C4F8 }}
+          package: final_release.zip
