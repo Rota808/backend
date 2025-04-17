@@ -21,7 +21,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        working-directory: ./backend/back # Changed to point to inner back folder
+        working-directory: ./backend/back
         run: |
           python -m venv venv
           source venv/bin/activate
@@ -32,28 +32,29 @@ jobs:
           if [ -f "requirements.txt" ]; then
             pip install -r requirements.txt
           fi
-          pip install gunicorn  # Explicitly install gunicorn
+          pip install gunicorn
 
       - name: Create deployment package
         working-directory: ./backend/back
         run: |
-          mkdir -p deployment/backend/back
-          cp -r * deployment/backend/back/
+          # Clean approach without recursive copying
+          mkdir -p _deploy
+          # Copy all files except venv and deployment dirs
+          find . -maxdepth 1 ! -name '.' ! -name 'venv' ! -name '_deploy' -exec cp -r {} _deploy/ \;
           # Include requirements.txt if it exists
           if [ -f "../requirements.txt" ]; then
-            cp ../requirements.txt deployment/
+            cp ../requirements.txt _deploy/
           fi
-          if [ -f "requirements.txt" ]; then
-            cp requirements.txt deployment/
-          fi
-          cd deployment
+          cd _deploy
           zip -r ../release.zip .
+          cd ..
+          rm -rf _deploy
 
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v4
         with:
           name: python-app
-          path: release.zip
+          path: ./backend/back/release.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -68,19 +69,11 @@ jobs:
         with:
           name: python-app
 
-      - name: Unzip artifact for deployment
-        run: |
-          mkdir -p deployment
-          unzip release.zip -d deployment
-          mv deployment/backend/back/* deployment/
-          rm -rf deployment/backend
-          zip -r final_release.zip deployment/*
-
-      - name: "Deploy to Azure Web App"
+      - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
         with:
           app-name: "es2back"
           slot-name: "Production"
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_F331B359598E4940A3E4F3E152E3C4F8 }}
-          package: final_release.zip
+          package: release.zip
