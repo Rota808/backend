@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['https://es2back-f9bra3hfdua8cfa7.francecentral-01.azurewebsites.net', 'https://blue-desert-0e083480f.6.azurestaticapps.net']
+CSRF_TRUSTED_ORIGINS = ['https://es2back-f9bra3hfdua8cfa7.francecentral-01.azurewebsites.net', 'https://blue-desert-0e083480f.6.azurestaticapps.net', 'http://localhost:8080/']
 DEBUG = False
 SECRET_KEY = 'django-insecure-vi!fgxv#jweky%z*te3587ll+k7r6(9x49xulg&5mrz&utn4bf'
 CORS_ALLOWED_ORIGINS = [
@@ -31,7 +31,7 @@ CORS_ALLOWED_ORIGINS = [
 ]
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = [
-    'https://es2back-f9bra3hfdua8cfa7.francecentral-01.azurewebsites.net', 'https://blue-desert-0e083480f.6.azurestaticapps.net',
+    'https://es2back-f9bra3hfdua8cfa7.francecentral-01.azurewebsites.net', 'https://blue-desert-0e083480f.6.azurestaticapps.net', 'http://localhost:8080/',
 ]
 
 # Application definition
