@@ -36,6 +36,10 @@ CORS_ORIGIN_WHITELIST = [
 
 # Application definition
 
+MERCADOPAGO_ACCESS_TOKEN = 'APP_USR-4911686956582688-041816-31668dad46e92a52be9f0816640dada6-2225972856'
+MERCADOPAGO_PUBLIC_KEY = 'APP_USR-94cce6e2-7574-4dc9-bf81-743b7d093b08'
+MERCADOPAGO_SANDBOX = True  # Set to False for production
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
