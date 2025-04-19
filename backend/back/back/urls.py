@@ -32,4 +32,7 @@ router.register(r'payments', views.PaymentViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
+    path('api/orders/<int:pk>/create_mercado_pago_preference/', 
+         views.OrderViewSet.as_view({'post': 'create_mercado_pago_preference'}),
+         name='create-mercado-pago-preference'),
 ]
