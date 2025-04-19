@@ -33,7 +33,12 @@ class StoreInfo(models.Model):
     contact_phone = models.CharField(max_length=20)
 
 class Order(models.Model):
-    STATUS_CHOICES = [('pending', 'Pending'), ('completed', 'Completed'), ('canceled', 'Canceled')]
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('payment_pending', 'Payment Pending'),
+        ('completed', 'Completed'), 
+        ('canceled', 'Canceled')
+    ]
     
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     order_date = models.DateTimeField(auto_now_add=True)
