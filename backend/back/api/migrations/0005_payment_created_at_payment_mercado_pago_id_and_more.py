@@ -35,7 +35,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='payment',
             name='payment_method',
-            field=models.CharField(choices=[('credit_card', 'Credit Card'), ('debit_card', 'Debit Card'), ('cash', 'Cash'), ('pix', 'PIX'), ('mercado_pago', 'Mercado Pago')], max_length=20),
+            field=models.CharField(choices=[('credit_card', 'Credit Card'), ('debit_card', 'Debit Card'), ('cash', 'Cash'), ('pix', 'PIX'), ('mercado_pago', 'mercadopago')], max_length=20),
         ),
         migrations.AlterField(
             model_name='payment',
