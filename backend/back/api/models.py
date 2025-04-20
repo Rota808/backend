@@ -72,7 +72,7 @@ class Payment(models.Model):
         ('debit_card', 'Debit Card'),
         ('cash', 'Cash'),
         ('pix', 'PIX'),
-        ('mercado_pago', 'mercadopago')
+        ('mercadopago', 'Mercado Pago')
     ]
     
     order = models.OneToOneField(Order, on_delete=models.CASCADE)
