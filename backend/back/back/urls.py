@@ -16,12 +16,4 @@ router.register(r'payments', views.PaymentViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
-    path('api/orders/<int:pk>/create_mercado_pago_preference/',
-          views.OrderViewSet.as_view({'post': 'create_mercado_pago_preference'}),
-         name='create-mercado-pago-preference'), 
-    path('api/payments/webhook/', views.OrderViewSet.as_view({'post': 'mercadopago_webhook'}), name='mercadopago-webhook'),
-    # New endpoint for confirming payments on client-side
-    path('api/payments/<int:pk>/confirm/',
-         views.OrderViewSet.as_view({'post': 'confirm_payment'}),
-         name='confirm-payment'),
 ]
