@@ -47,7 +47,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         order = self.get_object()
         
         # Initialize MercadoPago SDK
-        access_token = os.getenv('MERCADOPAGO_ACCESS_TOKEN')
+        access_token = 'APP_USR-4911686956582688-041816-31668dad46e92a52be9f0816640dada6-2225972856'
         if not access_token:
             logger.error("MercadoPago access token not configured")
             return Response(
@@ -81,8 +81,6 @@ class OrderViewSet(viewsets.ModelViewSet):
         
         # Get payer info from request or order
         payer_email = request.data.get('payer', {}).get('email', '')
-        if not payer_email and order.user.email:
-            payer_email = order.user.email
             
         # Create preference data
         preference_data = {
@@ -155,7 +153,7 @@ class OrderViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['post'])
     def test_mercado_pago(self, request):
         """Test endpoint for Mercado Pago integration"""
-        access_token = os.getenv('MERCADOPAGO_ACCESS_TOKEN')
+        access_token = 'APP_USR-4911686956582688-041816-31668dad46e92a52be9f0816640dada6-2225972856'
         if not access_token:
             return Response(
                 {'error': 'MercadoPago access token not configured'},
