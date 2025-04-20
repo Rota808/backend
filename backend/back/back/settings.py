@@ -21,17 +21,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['https://es2back-f9bra3hfdua8cfa7.francecentral-01.azurewebsites.net', 'https://blue-desert-0e083480f.6.azurestaticapps.net', 'http://localhost:8080/']
+CSRF_TRUSTED_ORIGINS = ['https://es2back-f9bra3hfdua8cfa7.francecentral-01.azurewebsites.net', 'https://blue-desert-0e083480f.6.azurestaticapps.net', 'http://localhost:8080/', 'https://api.mercadolibre.com']
 DEBUG = False
 SECRET_KEY = 'django-insecure-vi!fgxv#jweky%z*te3587ll+k7r6(9x49xulg&5mrz&utn4bf'
 CORS_ALLOWED_ORIGINS = [
     "https://blue-desert-0e083480f.6.azurestaticapps.net",
     "http://localhost:8080",
-    "https://es2back-f9bra3hfdua8cfa7.francecentral-01.azurewebsites.net"
+    "https://es2back-f9bra3hfdua8cfa7.francecentral-01.azurewebsites.net",
+    'https://api.mercadolibre.com'
 ]
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = [
-    'https://es2back-f9bra3hfdua8cfa7.francecentral-01.azurewebsites.net', 'https://blue-desert-0e083480f.6.azurestaticapps.net', 'http://localhost:8080/',
+    'https://es2back-f9bra3hfdua8cfa7.francecentral-01.azurewebsites.net', 'https://blue-desert-0e083480f.6.azurestaticapps.net', 'http://localhost:8080/', 'https://api.mercadolibre.com',
 ]
 
 # Application definition
@@ -103,6 +104,17 @@ DATABASES = {
         "PORT": '5432',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         "NAME": 'pizza',
+#         "USER": 'postgres',
+#         "PASSWORD": '1234',
+#         "HOST": 'localhost',
+#         "PORT": '5432',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
