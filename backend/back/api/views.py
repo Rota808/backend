@@ -1,5 +1,6 @@
 from rest_framework import viewsets, status
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view, permission_classes
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 import mercadopago
 import os
@@ -185,3 +186,129 @@ class OrderViewSet(viewsets.ModelViewSet):
                 {'error': str(e)},
                 status=status.HTTP_400_BAD_REQUEST
             )
+            
+    @api_view(['POST'])
+    @permission_classes([AllowAny])
+    def mercadopago_webhook(request):
+        """
+        Webhook to receive payment notifications from MercadoPago
+        """
+        try:
+            # Initialize MercadoPago SDK with your access token
+            access_token = 'APP_USR-4911686956582688-041816-31668dad46e92a52be9f0816640dada6-2225972856'
+            sdk = mercadopago.SDK(access_token)
+            
+            # Log the incoming webhook
+            logger.info(f"MercadoPago webhook received: {request.data}")
+            
+            # Get the topic and ID from the notification
+            topic = request.query_params.get('topic', '') or request.query_params.get('type', '')
+            resource_id = request.query_params.get('id', '')
+            
+            if not topic or not resource_id:
+                logger.error("Missing topic or ID in MercadoPago webhook")
+                return Response({"error": "Missing parameters"}, status=status.HTTP_400_BAD_REQUEST)
+            
+            # Process based on notification type
+            if topic == 'payment':
+                # Get payment information from MercadoPago API
+                payment_info = sdk.payment().get(resource_id)
+                
+                if payment_info["status"] != 200:
+                    logger.error(f"Failed to get payment info: {payment_info}")
+                    return Response({"error": "Failed to get payment info"}, status=status.HTTP_400_BAD_REQUEST)
+                
+                payment_data = payment_info["response"]
+                
+                # Get MercadoPago status
+                mp_status = payment_data["status"]
+                
+                # Get the order ID from external_reference
+                order_id = payment_data.get("external_reference")
+                if not order_id:
+                    logger.error("Missing external_reference in payment data")
+                    return Response({"error": "Missing order reference"}, status=status.HTTP_400_BAD_REQUEST)
+                
+                # Find the payment record
+                try:
+                    payment = Payment.objects.get(order__id=order_id)
+                except Payment.DoesNotExist:
+                    logger.error(f"Payment not found for order: {order_id}")
+                    return Response({"error": "Payment not found"}, status=status.HTTP_404_NOT_FOUND)
+                
+                # Update payment status based on MercadoPago status
+                payment_status_mapping = {
+                    'approved': 'paid',
+                    'pending': 'pending',
+                    'in_process': 'pending',
+                    'rejected': 'failed',
+                    'refunded': 'refunded',
+                    'cancelled': 'failed',
+                    'in_mediation': 'pending',
+                    'charged_back': 'failed'
+                }
+                
+                payment.payment_status = payment_status_mapping.get(mp_status, 'pending')
+                payment.mercado_pago_status = mp_status
+                payment.transaction_id = payment_data["id"]
+                payment.save()
+                
+                # Update order status if payment is approved
+                if mp_status == 'approved':
+                    order = payment.order
+                    order.status = 'completed'
+                    order.save()
+                
+                logger.info(f"Payment status updated: {payment.id} -> {payment.payment_status}")
+                return Response({"status": "success"}, status=status.HTTP_200_OK)
+                
+            elif topic == 'merchant_order':
+                # Handle merchant_order notifications if needed
+                return Response({"status": "success"}, status=status.HTTP_200_OK)
+            
+            else:
+                logger.warning(f"Unhandled MercadoPago webhook topic: {topic}")
+                return Response({"status": "ignored"}, status=status.HTTP_200_OK)
+                
+        except Exception as e:
+            logger.error(f"Error processing MercadoPago webhook: {str(e)}", exc_info=True)
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    @action(detail=True, methods=['post'])
+    def confirm_payment(self, request, pk=None):
+        """Manually confirm a payment (for client-side confirmation)"""
+        payment = self.get_object()
+        status_value = request.data.get('status')
+        
+        if not status_value:
+            return Response(
+                {'error': 'Status value is required'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Map status from request to internal payment status
+        status_mapping = {
+            'approved': 'paid',
+            'pending': 'pending',
+            'rejected': 'failed',
+            'refunded': 'refunded'
+        }
+        
+        payment_status = status_mapping.get(status_value, 'pending')
+        
+        # Update payment
+        payment.payment_status = payment_status
+        payment.mercado_pago_status = status_value
+        payment.save()
+        
+        # Update order status if payment is approved
+        if payment_status == 'paid':
+            order = payment.order
+            order.status = 'completed'
+            order.save()
+        
+        return Response({
+            'status': 'success',
+            'payment_status': payment.payment_status,
+            'order_status': payment.order.status
+        })
