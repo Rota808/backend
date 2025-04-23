@@ -7,6 +7,7 @@ import os
 from datetime import datetime, timedelta
 import logging
 from .serializers import *
+from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
@@ -104,9 +105,9 @@ class OrderViewSet(viewsets.ModelViewSet):
                 "binary_mode": True,
                 "auto_return": "approved",
                 "back_urls": {
-                    "success": request.build_absolute_uri(f'/order/{order.id}/success'),
-                    "failure": request.build_absolute_uri(f'/order/{order.id}/failure'),
-                    "pending": request.build_absolute_uri(f'/order/{order.id}/pending')
+                    "success": f"{settings.FRONTEND_URL}/order/{order.id}/success",
+                    "failure": f"{settings.FRONTEND_URL}/order/{order.id}/failure",
+                    "pending": f"{settings.FRONTEND_URL}/order/{order.id}/pending"
                 },
                 "notification_url": request.build_absolute_uri('/api/payments/webhook/'),
                 "external_reference": str(order.id),
