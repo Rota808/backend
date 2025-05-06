@@ -1,4 +1,21 @@
-Em /backend/back/back/settings.py, altere as credenciais do banco
+## Configuração do Banco de Dados
+
+Altere o arquivo `/backend/back/back/settings.py` para incluir as credenciais corretas do banco de dados PostgreSQL.
+
+### Exemplo:
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        "NAME": 'pizza',
+        "USER": 'postgres',
+        "PASSWORD": '1234',
+        "HOST": 'localhost',
+        "PORT": '5432',
+    }
+}
+
+### Esse é o atual, vinculado ao azure
 
 DATABASES = {
     'default': {
@@ -11,23 +28,10 @@ DATABASES = {
     }
 }
 
-Para o mesmo estilo de:
+## Execução do Projeto
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         "NAME": 'pizza',
-#         "USER": 'postgres',
-#         "PASSWORD": '1234',
-#         "HOST": 'localhost',
-#         "PORT": '5432',
-#     }
-# }
+Acesse o diretório `/backend/back/` e execute os seguintes comandos:
 
-Em /backend/back/
-
-python manage.py makemigrations api
-
-python manage.py migrate
-
+python manage.py makemigrations api  
+python manage.py migrate  
 python manage.py runserver
